@@ -1,9 +1,12 @@
 import Pusher from 'pusher';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const pusher = new Pusher({
-    appId: "2161077",
-    key: "a7ccab20d24c2a7d2f0b",
-    secret: "480f7a30d610d562cfb6",
-    cluster: "ap1",
+    appId: process.env.PUSHER_APP_ID || "",
+    key: process.env.PUSHER_KEY || "",
+    secret: process.env.PUSHER_SECRET || "",
+    cluster: process.env.PUSHER_CLUSTER || "ap1",
     useTLS: true
 });

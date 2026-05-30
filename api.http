@@ -1,4 +1,4 @@
-@url=http://localhost:30391
+@url=http://localhost:30381
 
 ##
 GET {{url}}/v1/api
@@ -8,7 +8,7 @@ GET {{url}}/v1/api
 ###
 GET {{url}}/v1/api/achievement
 Content-Type: application/json
-x-timestamp: 1780124967459
+x-timestamp: 1780146802132
 
 
 ###
@@ -19,13 +19,13 @@ x-timestamp: 1780129994603
 ###
 GET {{url}}/v1/api/ranting
 Content-Type: application/json
-x-timestamp: 1780130795814
+x-timestamp: 1780146924672
 
 
 ###
 POST {{url}}/v1/api/ranting
 Content-Type: application/json
-x-timestamp: 1780130795814
+x-timestamp: 1780146924672
 
 {
     "rating": 3
@@ -34,12 +34,12 @@ x-timestamp: 1780130795814
 ###
 GET {{url}}/v1/api/experience
 Content-Type: application/json
-x-timestamp: 1780134807851
+x-timestamp: 1780146924672
 
 ###
 POST {{url}}/v1/api/experience
 Content-Type: application/json
-x-timestamp: 1780134807851
+x-timestamp: 1780146924672
 
 {
     "companyName": "PT Cipta Teknologi",

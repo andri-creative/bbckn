@@ -3,6 +3,15 @@
 ##
 GET {{url}}/v1/api
 
+### Socket
+GET  {{url}}/api/socket
+Content-Type: application/json
+x-timestamp: 1780154762638
+
+{
+    "connection": "test"
+}
+
 
 
 ###

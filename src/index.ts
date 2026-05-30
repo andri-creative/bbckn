@@ -52,17 +52,6 @@ async function startServer() {
     process.on('SIGINT', gracefulShutdown);
     process.on('SIGTERM', gracefulShutdown);
 
-    // Optional: Monitor connection state
-    setInterval(() => {
-      const state = mongoose.connection.readyState;
-      const stateText = {
-        0: 'disconnected',
-        1: 'connected',
-        2: 'connecting',
-        3: 'disconnecting'
-      };
-      console.log(`💾 MongoDB State: ${stateText[state as keyof typeof stateText]} (${state})`);
-    }, 30000); // Cek setiap 30 detik
 
   } catch (error) {
     console.error('❌ Gagal start server:', error);

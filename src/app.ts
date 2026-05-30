@@ -19,10 +19,15 @@ app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 app.use(express.static(path.join(process.cwd(), 'public')));
 
+
+app.use('/api/socket', socketRoutes);
+
 // Middleware: cek koneksi DB sebelum request masuk ke routes yang butuh DB
 app.use((req, res, next) => {
     const skipPaths = ['/health', '/v1/api', '/'];
+    const skipPrefixes = ['/api/socket'];
     if (skipPaths.includes(req.path)) return next();
+    if (skipPrefixes.some(prefix => req.path.startsWith(prefix))) return next();
 
     if (mongoose.connection.readyState !== 1) {
         return res.status(503).json({
@@ -36,7 +41,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use(version, routes);
-app.use('/api/socket', socketRoutes);
+
 
 // Health check / test route (tidak butuh DB)
 app.get('/v1/api', (req, res) => {

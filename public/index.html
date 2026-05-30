@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Premium Image Card</title>
+    <!-- Modern Typography -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-color: #0f172a;
+        --card-bg: rgba(30, 41, 59, 0.6);
+        --card-border: rgba(255, 255, 255, 0.1);
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --accent-start: #3b82f6;
+        --accent-end: #8b5cf6;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        background-image:
+          radial-gradient(
+            at 0% 0%,
+            rgba(59, 130, 246, 0.15) 0px,
+            transparent 50%
+          ),
+          radial-gradient(
+            at 100% 100%,
+            rgba(139, 92, 246, 0.15) 0px,
+            transparent 50%
+          );
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        color: var(--text-primary);
+      }
+
+      .card-container {
+        perspective: 1000px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+        max-width: 1200px;
+        width: 100%;
+      }
+
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 24px;
+        padding: 1rem;
+        width: 340px;
+        /* Glassmorphism effect */
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+      }
+
+      /* Hover animation */
+      .card:hover {
+        transform: translateY(-10px);
+        box-shadow:
+          0 30px 60px -15px rgba(0, 0, 0, 0.7),
+          0 0 40px rgba(139, 92, 246, 0.2);
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+
+      .image-wrapper {
+        width: 100%;
+        height: 220px;
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .card:hover .image-wrapper img {
+        transform: scale(1.08); /* Zoom effect on image */
+      }
+
+      /* Subtle dark gradient overlay on image */
+      .image-wrapper::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          transparent 60%,
+          rgba(15, 23, 42, 0.8)
+        );
+        opacity: 0.6;
+      }
+
+      .badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        padding: 0.4rem 0.8rem;
+        border-radius: 30px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-transform: uppercase;
+        z-index: 2;
+      }
+
+      .content {
+        padding: 1.5rem 0.5rem 0.5rem;
+      }
+
+      .title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+      }
+
+      .description {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .author {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--card-border);
+      }
+
+      .author-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .author-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .date {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+      }
+
+      .action-btn {
+        background: linear-gradient(
+          135deg,
+          var(--accent-start),
+          var(--accent-end)
+        );
+        border: none;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+      }
+
+      .action-btn:hover {
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+        transform: translateY(-2px);
+      }
+
+      .action-btn:active {
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card-container" id="card-container">
+      <!-- Loading state -->
+      <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">Loading data...</div>
+    </div>
+
+    <script>
+      async function fetchAchievements() {
+        try {
+          const response = await fetch('/v1/api/achievement', {
+            headers: {
+              'x-timestamp': Date.now().toString()
+            }
+          });
+          const result = await response.json();
+
+          console.log('timestamp: ', Date.now());
+
+          const container = document.getElementById('card-container');
+          container.innerHTML = ''; // Hapus loading state
+
+          if (result.success === 'ok' && result.data && result.data.length > 0) {
+            result.data.forEach(item => {
+              // Format tanggal
+              const dateObj = new Date(item.createdAt);
+              const formattedDate = dateObj.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+              });
+
+              // Buat elemen card
+              const cardHTML = `
+                <div class="card">
+                  <div class="image-wrapper">
+                    <div class="badge">${item.category || 'Achievement'}</div>
+                    <img src="${item.image}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=340&auto=format&fit=crop'" />
+                  </div>
+
+                  <div class="content">
+                    <h2 class="title">${item.title}</h2>
+                    <p class="description">${item.description}</p>
+
+                    <div class="footer">
+                      <div class="author">
+                        <div class="author-info">
+                          <span class="author-name">${item.issuer || 'System'}</span>
+                          <span class="date">${formattedDate}</span>
+                        </div>
+                      </div>
+                      <button class="action-btn">Lihat</button>
+                    </div>
+                  </div>
+                </div>
+              `;
+              
+              // Tambahkan card ke container
+              container.innerHTML += cardHTML;
+            });
+          } else {
+            container.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 2rem;">Belum ada data achievement.</div>';
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          const container = document.getElementById('card-container');
+          container.innerHTML = '<div style="text-align: center; color: #ef4444; padding: 2rem;">Gagal memuat data. Pastikan server API berjalan.</div>';
+        }
+      }
+
+      // Panggil fungsi saat halaman dimuat
+      document.addEventListener('DOMContentLoaded', fetchAchievements);
+    </script>
+  </body>
+</html>

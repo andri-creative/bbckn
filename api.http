@@ -1,0 +1,107 @@
+@url=http://localhost:30391
+
+##
+GET {{url}}/v1/api
+
+
+
+###
+GET {{url}}/v1/api/achievement
+Content-Type: application/json
+x-timestamp: 1780124967459
+
+
+###
+GET {{url}}/v1/api/album
+Content-Type: application/json
+x-timestamp: 1780129994603
+
+###
+GET {{url}}/v1/api/ranting
+Content-Type: application/json
+x-timestamp: 1780130795814
+
+
+###
+POST {{url}}/v1/api/ranting
+Content-Type: application/json
+x-timestamp: 1780130795814
+
+{
+    "rating": 3
+}
+
+###
+GET {{url}}/v1/api/experience
+Content-Type: application/json
+x-timestamp: 1780134807851
+
+###
+POST {{url}}/v1/api/experience
+Content-Type: application/json
+x-timestamp: 1780134807851
+
+{
+    "companyName": "PT Cipta Teknologi",
+    "position": "Frontend Developer",
+    "startDate": "2023-01-01",
+    "description": "Mengembangkan antarmuka pengguna interaktif menggunakan React dan Next.js",
+    "responsibilities": ["Ngoding", "Meeting", "Review Code"],
+    "type": "Penuh Waktu",
+    "mode": "WFH",
+    "status": "active"
+}
+
+###
+PUT {{url}}/v1/api/experience/6a1ab3a20b0c7edbe2a320bb
+Content-Type: application/json
+x-timestamp: 1780134807851
+
+{
+    "companyName": "PT Cipta Teknologi Update",
+    "position": "Senior Frontend Developer",
+    "startDate": "2023-01-01",
+    "description": "Mengembangkan antarmuka dengan sangat cepat",
+    "responsibilities": ["Lead Tim", "Ngoding"],
+    "type": "Penuh Waktu",
+    "mode": "WFA",
+    "status": "active"
+}
+
+###
+GET {{url}}/v1/api/tools
+Content-Type: application/json
+x-timestamp: 1780137137452
+
+###
+POST {{url}}/v1/api/tools
+Content-Type: application/json
+x-timestamp: 1780137539866
+
+{
+    "name": "Next.js",
+    "description": "React Framework for Production"
+}
+
+###
+GET {{url}}/v1/api/project
+Content-Type: application/json
+x-timestamp: 1780137539866
+
+###
+POST {{url}}/v1/api/project
+Content-Type: application/json
+x-timestamp: 1780137539866
+
+{
+    "title": "Aplikasi Web Super",
+    "description": "Aplikasi luar biasa dengan fitur mantap",
+    "demoUrl": "https://demo.com",
+    "githubUrl": "https://github.com",
+    "techStack": ["ID_TOOLS_TECHSTACK_DISINI"],
+    "role": ["Frontend", "Backend"],
+    "features": ["Auth", "Dashboard"],
+    "tools": ["ID_TOOLS_DISINI"],
+    "status": true,
+    "pinned": true
+}

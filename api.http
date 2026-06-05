@@ -28,7 +28,7 @@ x-timestamp: 1780129994603
 ###
 GET {{url}}/v1/api/ranting
 Content-Type: application/json
-x-timestamp: 1780146924672
+x-timestamp: 1780580902440
 
 
 ###
@@ -43,22 +43,27 @@ x-timestamp: 1780146924672
 ###
 GET {{url}}/v1/api/experience
 Content-Type: application/json
-x-timestamp: 1780146924672
+x-timestamp: {{$timestamp}}
 
 ###
 POST {{url}}/v1/api/experience
 Content-Type: application/json
-x-timestamp: 1780146924672
+x-timestamp: {{$timestamp}}
 
 {
-    "companyName": "PT Cipta Teknologi",
+    "companyName": "Freelance / Remote",
     "position": "Frontend Developer",
-    "startDate": "2023-01-01",
-    "description": "Mengembangkan antarmuka pengguna interaktif menggunakan React dan Next.js",
-    "responsibilities": ["Ngoding", "Meeting", "Review Code"],
-    "type": "Penuh Waktu",
+    "location": "Remote",
+    "startDate": "2022-06-01",
+    "endDate": "2023-12-01",
+    "icon": "ph:laptop-bold",
+    "summary": "Delivered 10+ web projects for clients across various industries.",
+    "content": "<p>Specialized in responsive UI design and performance optimization.</p><ul><li>Utilized Next.js SSR/SSG to boost SEO rankings.</li><li>Integrated headless CMS architectures.</li></ul>",
+    "current": false,
+    "responsibilities": ["Next.js", "TypeScript", "Tailwind", "Figma"],
+    "type": "Freelance",
     "mode": "WFH",
-    "status": "active"
+    "status": "inactive"
 }
 
 ###
@@ -93,24 +98,473 @@ x-timestamp: 1780137539866
 }
 
 ###
-GET {{url}}/v1/api/project
+GET {{url}}/v1/api/project?page=1&limit=20
 Content-Type: application/json
 x-timestamp: 1780137539866
 
 ###
 POST {{url}}/v1/api/project
 Content-Type: application/json
-x-timestamp: 1780137539866
+x-timestamp: {{$timestamp}}
 
 {
-    "title": "Aplikasi Web Super",
-    "description": "Aplikasi luar biasa dengan fitur mantap",
+    "title": "E-Commerce Platform",
+    "slug": "e-commerce-platform",
+    "category": "Professional",
+    "summary": "Full-stack marketplace with real-time inventory.",
+    "content": "<h3>Project Overview</h3><p>Deskripsi panjang...</p>",
+    "company": "PT Maju Bersama",
+    "duration": "8 Months",
+    "location": "Jakarta, Indonesia",
+    "workType": "On-site",
+    "icon": "ph:storefront-bold",
+    "image": [
+        "https://images.unsplash.com/photo-1557821552-1710515302a9?auto=format&fit=crop&q=80&w=1000"
+    ],
+    "color": "from-cyan-500/20 to-blue-500/20",
+    "accent": "text-cyan-400",
+    "border": "hover:border-cyan-500/40",
     "demoUrl": "https://demo.com",
     "githubUrl": "https://github.com",
-    "techStack": ["ID_TOOLS_TECHSTACK_DISINI"],
-    "role": ["Frontend", "Backend"],
-    "features": ["Auth", "Dashboard"],
-    "tools": ["ID_TOOLS_DISINI"],
+    "sort": 1,
     "status": true,
-    "pinned": true
+    "techStack": [],
+    "tools": []
 }
+
+###
+# CONTOH PUT (PARTIAL UPDATE) PROJECT
+# Anda bebas mengirim field apa saja (tanpa ditolak validasi)
+PUT {{url}}/v1/api/project/6a22bbde24272d86927f812d
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "techStack": [],
+    "tools": []
+}
+
+
+###
+GET {{url}}/v1/api/tools-icon
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+
+###
+POST {{url}}/v1/api/tools-icon
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "label": "TailwindCSS",
+    "icon": "<svg fill='none' viewBox='0 0 54 33'><g clip-path='url(#tailwindcss__a)'><path fill='#38bdf8' fill-rule='evenodd' d='M27 0c-7.2 0-11.7 3.6-13.5 10.8 2.7-3.6 5.85-4.95 9.45-4.05 2.054.513 3.522 2.004 5.147 3.653C30.744 13.09 33.808 16.2 40.5 16.2c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C36.756 3.11 33.692 0 27 0zM13.5 16.2C6.3 16.2 1.8 19.8 0 27c2.7-3.6 5.85-4.95 9.45-4.05 2.054.514 3.522 2.004 5.147 3.653C17.244 29.29 20.308 32.4 27 32.4c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C23.256 19.31 20.192 16.2 13.5 16.2z' clip-rule='evenodd'/></g><defs><clipPath id='tailwindcss__a'><path fill='#fff' d='M0 0h54v32.4H0z'/></clipPath></defs></svg>"
+}
+
+###
+PUT {{url}}/v1/api/tools-icon/6a21aa36eef2a2ceccbc9bd1
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "order": 1
+}
+
+###
+GET {{url}}/v1/api/bio
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+###
+POST {{url}}/v1/api/bio
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "stats": [
+        { "value": "2+", "label": "Years Coding" }
+    ],
+    "educations": [
+        {
+            "institution": "Universitas 17 Agustus 1945 Surabaya",
+            "major": "Teknik Informatika",
+            "degree": "Bachelor's degree • S.Kom",
+            "period": "2021 – 2025",
+            "location": "Surabaya, Indonesia",
+            "thesis": {
+                "label": "Skripsi",
+                "title": "Generating Synthetic...",
+                "tags": ["AI"]
+            }
+        }
+    ],
+    "publications": [
+        {
+            "title": "Dummy Journal",
+            "journal": "Journal of Dummy",
+            "volume": "Vol. 1",
+            "date": "January 1, 2027",
+            "doi": "10.000",
+            "authors": ["Andrianto"],
+            "link": "#",
+            "status": "Published"
+        }
+    ]
+}
+
+###
+PUT {{url}}/v1/api/bio/REPLACE_WITH_BIO_ID
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "stats": [
+        { "value": "3+", "label": "Years Coding" }
+    ]
+}
+
+###
+# CONTOH POST TERPISAH: HANYA MENGIRIM STATS
+POST {{url}}/v1/api/bio
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "stats": [
+        { "value": "5+", "label": "Years of Experience" },
+        { "value": "20+", "label": "Projects Built" },
+        { "value": "1", "label": "Journal Published" },
+        { "value": "∞", "label": "Coffee Consumed" }
+    ]
+}
+
+###
+# CONTOH POST TERPISAH: HANYA MENGIRIM EDUCATIONS
+POST {{url}}/v1/api/bio
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "educations": [
+        {
+            "institution": "Universitas 17 Agustus 1945 Surabaya",
+            "major": "Teknik Informatika",
+            "degree": "Bachelor's degree • S.Kom",
+            "period": "2021 – 2025",
+            "location": "Surabaya, Indonesia",
+            "thesis": {
+                "label": "Skripsi",
+                "title": "Generating Synthetic B-Mode Fetal Ultrasound Images Using CycleGAN-Based Deep Learning",
+                "tags": ["CycleGAN", "Deep Learning", "HisDis", "ResNet", "TensorFlow", "PatchGAN", "Fetal Imaging"]
+        }
+        }
+    ]
+}
+
+###
+# CONTOH POST TERPISAH: HANYA MENGIRIM PUBLICATIONS
+POST {{url}}/v1/api/bio
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "publications": [
+        {
+            "title": "Generating Synthetic B-Mode Fetal Ultrasound Images Using CycleGAN-Based Deep Learning",
+            "journal": "Indonesian Journal of Electronics, Electromedical Engineering, and Medical Informatics",
+            "volume": "Vol. 8, No. 1, pp. 70–79",
+            "date": "January 27, 2026",
+            "doi": "10.35882/ijeeemi.v8i1.282",
+            "authors": ["F.A. Hermawati", "B. Hardiansyah", "Andrianto"],
+            "link": "http://www.ijeeemi.org/index.php/ijeeemi/article/view/282",
+            "status": "Published"
+        }
+    ]
+}
+
+
+###
+PUT {{url}}/v1/api/bio/6a22a57d14e27466082fa528
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "publications": [
+        {
+          "_id": "6a22a5be14e27466082fa550",
+          "title": "Update Generating Synthetic B-Mode Fetal Ultrasound Images Using CycleGAN-Based Deep Learning"
+        }
+    ]
+}
+
+###
+# ─────────────────────────────────────────────────────────
+# ACHIEVEMENT API
+# ─────────────────────────────────────────────────────────
+GET {{url}}/v1/api/achievement
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+###
+POST {{url}}/v1/api/achievement
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "slug": "aws-certified-solutions-architect",
+    "title": "AWS Certified Solutions Architect",
+    "description": "Mendemonstrasikan keahlian tingkat lanjut dalam merancang sistem terdistribusi di platform Amazon Web Services (AWS).",
+    "image": "https://images.unsplash.com/photo-1523289217630-0dd16184af8e?auto=format&fit=crop&q=80&w=1000",
+    "issuer": "Amazon Web Services",
+    "issueDate": "Oktober 2023",
+    "label": "Cloud Architecture",
+    "tags": ["AWS", "Cloud", "Architecture"],
+    "status": true,
+    "pinned": true,
+    "category": "Sertifikat",
+    "level": "Internasional"
+}
+
+###
+PUT {{url}}/v1/api/achievement/6a22c3577a0d95e83c69dd83
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "sort": 1,
+    "status": false
+}
+
+    "techStack": [],
+    "tools": []
+}
+
+
+###
+GET {{url}}/v1/api/tools-icon
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+
+###
+POST {{url}}/v1/api/tools-icon
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "label": "TailwindCSS",
+    "icon": "<svg fill='none' viewBox='0 0 54 33'><g clip-path='url(#tailwindcss__a)'><path fill='#38bdf8' fill-rule='evenodd' d='M27 0c-7.2 0-11.7 3.6-13.5 10.8 2.7-3.6 5.85-4.95 9.45-4.05 2.054.513 3.522 2.004 5.147 3.653C30.744 13.09 33.808 16.2 40.5 16.2c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C36.756 3.11 33.692 0 27 0zM13.5 16.2C6.3 16.2 1.8 19.8 0 27c2.7-3.6 5.85-4.95 9.45-4.05 2.054.514 3.522 2.004 5.147 3.653C17.244 29.29 20.308 32.4 27 32.4c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C23.256 19.31 20.192 16.2 13.5 16.2z' clip-rule='evenodd'/></g><defs><clipPath id='tailwindcss__a'><path fill='#fff' d='M0 0h54v32.4H0z'/></clipPath></defs></svg>"
+}
+
+###
+PUT {{url}}/v1/api/tools-icon/6a21aa36eef2a2ceccbc9bd1
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "order": 1
+}
+
+###
+GET {{url}}/v1/api/bio
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+###
+POST {{url}}/v1/api/bio
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "stats": [
+        { "value": "2+", "label": "Years Coding" }
+    ],
+    "educations": [
+        {
+            "institution": "Universitas 17 Agustus 1945 Surabaya",
+            "major": "Teknik Informatika",
+            "degree": "Bachelor's degree • S.Kom",
+            "period": "2021 – 2025",
+            "location": "Surabaya, Indonesia",
+            "thesis": {
+                "label": "Skripsi",
+                "title": "Generating Synthetic...",
+                "tags": ["AI"]
+            }
+        }
+    ],
+    "publications": [
+        {
+            "title": "Dummy Journal",
+            "journal": "Journal of Dummy",
+            "volume": "Vol. 1",
+            "date": "January 1, 2027",
+            "doi": "10.000",
+            "authors": ["Andrianto"],
+            "link": "#",
+            "status": "Published"
+        }
+    ]
+}
+
+###
+PUT {{url}}/v1/api/bio/REPLACE_WITH_BIO_ID
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "stats": [
+        { "value": "3+", "label": "Years Coding" }
+    ]
+}
+
+###
+# CONTOH POST TERPISAH: HANYA MENGIRIM STATS
+POST {{url}}/v1/api/bio
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "stats": [
+        { "value": "5+", "label": "Years of Experience" },
+        { "value": "20+", "label": "Projects Built" },
+        { "value": "1", "label": "Journal Published" },
+        { "value": "∞", "label": "Coffee Consumed" }
+    ]
+}
+
+###
+# CONTOH POST TERPISAH: HANYA MENGIRIM EDUCATIONS
+POST {{url}}/v1/api/bio
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "educations": [
+        {
+            "institution": "Universitas 17 Agustus 1945 Surabaya",
+            "major": "Teknik Informatika",
+            "degree": "Bachelor's degree • S.Kom",
+            "period": "2021 – 2025",
+            "location": "Surabaya, Indonesia",
+            "thesis": {
+                "label": "Skripsi",
+                "title": "Generating Synthetic B-Mode Fetal Ultrasound Images Using CycleGAN-Based Deep Learning",
+                "tags": ["CycleGAN", "Deep Learning", "HisDis", "ResNet", "TensorFlow", "PatchGAN", "Fetal Imaging"]
+        }
+        }
+    ]
+}
+
+###
+# CONTOH POST TERPISAH: HANYA MENGIRIM PUBLICATIONS
+POST {{url}}/v1/api/bio
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "publications": [
+        {
+            "title": "Generating Synthetic B-Mode Fetal Ultrasound Images Using CycleGAN-Based Deep Learning",
+            "journal": "Indonesian Journal of Electronics, Electromedical Engineering, and Medical Informatics",
+            "volume": "Vol. 8, No. 1, pp. 70–79",
+            "date": "January 27, 2026",
+            "doi": "10.35882/ijeeemi.v8i1.282",
+            "authors": ["F.A. Hermawati", "B. Hardiansyah", "Andrianto"],
+            "link": "http://www.ijeeemi.org/index.php/ijeeemi/article/view/282",
+            "status": "Published"
+        }
+    ]
+}
+
+
+###
+PUT {{url}}/v1/api/bio/6a22a57d14e27466082fa528
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "publications": [
+        {
+          "_id": "6a22a5be14e27466082fa550",
+          "title": "Update Generating Synthetic B-Mode Fetal Ultrasound Images Using CycleGAN-Based Deep Learning"
+        }
+    ]
+}
+
+###
+# ─────────────────────────────────────────────────────────
+# ACHIEVEMENT API
+# ─────────────────────────────────────────────────────────
+GET {{url}}/v1/api/achievement?page=1&limit=20
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+###
+POST {{url}}/v1/api/achievement
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "slug": "aws-certified-solutions-architect",
+    "title": "AWS Certified Solutions Architect",
+    "description": "Mendemonstrasikan keahlian tingkat lanjut dalam merancang sistem terdistribusi di platform Amazon Web Services (AWS).",
+    "image": "https://images.unsplash.com/photo-1523289217630-0dd16184af8e?auto=format&fit=crop&q=80&w=1000",
+    "issuer": "Amazon Web Services",
+    "issueDate": "Oktober 2023",
+    "label": "Cloud Architecture",
+    "tags": ["AWS", "Cloud", "Architecture"],
+    "status": true,
+    "pinned": true,
+    "category": "Sertifikat",
+    "level": "Internasional"
+}
+
+###
+PUT {{url}}/v1/api/achievement/6a22c3577a0d95e83c69dd83
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "sort": 1,
+    "status": false
+}
+
+###
+DELETE {{url}}/v1/api/achievement/REPLACE_WITH_ID
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+###
+# ─────────────────────────────────────────────────────────
+# ALBUM API
+# ─────────────────────────────────────────────────────────
+GET {{url}}/v1/api/album?page=1&limit=20
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+###
+POST {{url}}/v1/api/album
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+x-timestamp: {{$timestamp}}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="contoh_gambar.jpg"
+Content-Type: image/jpeg
+
+< ./path/ke/gambar_anda.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+PUT {{url}}/v1/api/album/REPLACE_WITH_ID
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "status": false`
+}
+
+###
+DELETE {{url}}/v1/api/album/REPLACE_WITH_ID
+Content-Type: application/json
+x-timestamp: {{$timestamp}}

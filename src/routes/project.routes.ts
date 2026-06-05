@@ -13,10 +13,10 @@ import { validateProject } from '../validators/project.validator';
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-router.post('/', upload.single('image'), convertToWebp, validateProject, createProject);
+router.post('/', upload.array('image', 6), convertToWebp, validateProject, createProject);
 router.get('/', getProjects);
 router.get('/:id', getProjectById);
-router.put('/:id', upload.single('image'), convertToWebp, validateProject, updateProject);
+router.put('/:id', upload.array('image', 6), convertToWebp, updateProject);
 router.delete('/:id', deleteProject);
 
 export default router;

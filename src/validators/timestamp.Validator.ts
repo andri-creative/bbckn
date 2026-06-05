@@ -5,10 +5,14 @@ export const isTimestampValid = (timestampStr: string | undefined | string[]): {
         return { isValid: false, message: 'Header timestamp tidak ditemukan' };
     }
 
-    const clientTimestamp = parseInt(timestampStr as string, 10);
+    let clientTimestamp = parseInt(timestampStr as string, 10);
 
     if (isNaN(clientTimestamp)) {
         return { isValid: false, message: 'Format timestamp tidak valid' };
+    }
+
+    if (clientTimestamp < 10000000000) {
+        clientTimestamp *= 1000;
     }
 
     const currentServerTime = Date.now();

@@ -2,21 +2,40 @@ import Project, { IProject } from '../models/project.model';
 import { uploadToBox, getBoxFileUrl, getOrCreateBoxFolder } from '../helpers/boxUploader';
 
 export class ProjectService {
-    static async create(data: any, file?: Express.Multer.File): Promise<IProject> {
-        if (!file) throw new Error('Gambar project wajib diupload');
-        const folderId = await getOrCreateBoxFolder('projects');
-        const uploadedFile = await uploadToBox(file.buffer, file.originalname, folderId);
+    static async create(data: any, files?: Express.Multer.File[]): Promise<IProject> {
+        if (files && files.length > 0) {
+            const folderId = await getOrCreateBoxFolder('projects');
+            if (!data.image) data.image = [];
+            if (!Array.isArray(data.image)) data.image = [data.image];
+
+            for (const file of files) {
+                const uploadedFile = await uploadToBox(file.buffer, file.originalname, folderId);
+                data.image.push(uploadedFile);
+            }
+        }
         
-        const newProject = new Project({ ...data, image: uploadedFile });
+        const newProject = new Project(data);
         return await newProject.save();
     }
 
-    static async getAll(): Promise<any[]> {
-        const projects = await Project.find().populate('tools').populate('techStack').sort({ createdAt: -1 });
-        return Promise.all(projects.map(async (project) => {
+    static async getAll(page: number = 1, limit: number = 20): Promise<{ data: any[], pagination: any }> {
+        const skip = (page - 1) * limit;
+        const total = await Project.countDocuments();
+        
+        const projects = await Project.find()
+            .populate('tools')
+            .populate('techStack')
+            .sort({ sort: 1, createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        const mappedData = await Promise.all(projects.map(async (project) => {
             const data: any = project.toObject();
-            if (data.image) {
-                try { data.imageUrl = await getBoxFileUrl(data.image); } catch (e) { data.imageUrl = null; }
+            if (data.image && Array.isArray(data.image)) {
+                data.imageUrls = await Promise.all(data.image.map(async (img: string) => {
+                    if (img.startsWith('http')) return img;
+                    try { return await getBoxFileUrl(img); } catch { return img; }
+                }));
             }
             if (data.tools && Array.isArray(data.tools)) {
                 data.tools = await Promise.all(data.tools.map(async (tool: any) => {
@@ -36,6 +55,16 @@ export class ProjectService {
             }
             return data;
         }));
+
+        return {
+            data: mappedData,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        };
     }
 
     static async getById(id: string): Promise<any | null> {
@@ -43,8 +72,11 @@ export class ProjectService {
         if (!project) return null;
         
         const data: any = project.toObject();
-        if (data.image) {
-            try { data.imageUrl = await getBoxFileUrl(data.image); } catch (e) { data.imageUrl = null; }
+        if (data.image && Array.isArray(data.image)) {
+            data.imageUrls = await Promise.all(data.image.map(async (img: string) => {
+                if (img.startsWith('http')) return img;
+                try { return await getBoxFileUrl(img); } catch { return img; }
+            }));
         }
         if (data.tools && Array.isArray(data.tools)) {
             data.tools = await Promise.all(data.tools.map(async (tool: any) => {
@@ -65,14 +97,19 @@ export class ProjectService {
         return data;
     }
 
-    static async update(id: string, data: any, file?: Express.Multer.File): Promise<IProject | null> {
+    static async update(id: string, data: any, files?: Express.Multer.File[]): Promise<IProject | null> {
         const project = await Project.findById(id);
         if (!project) return null;
 
-        if (file) {
+        if (files && files.length > 0) {
             const folderId = await getOrCreateBoxFolder('projects');
-            const uploadedFile = await uploadToBox(file.buffer, file.originalname, folderId);
-            data.image = uploadedFile;
+            if (!data.image) data.image = [];
+            if (!Array.isArray(data.image)) data.image = [data.image];
+
+            for (const file of files) {
+                const uploadedFile = await uploadToBox(file.buffer, file.originalname, folderId);
+                data.image.push(uploadedFile);
+            }
         }
         return await Project.findByIdAndUpdate(id, data, { new: true }).populate('tools').populate('techStack');
     }

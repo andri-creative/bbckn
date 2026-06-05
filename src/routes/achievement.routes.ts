@@ -3,6 +3,7 @@ import {
     createAchievement,
     getAchievements,
     getAchievementById,
+    updateAchievement,
     deleteAchievement
 } from '../controllers/achievement.controller';
 import { validateAchievement } from '../validators/achievement.validator';
@@ -24,6 +25,9 @@ router.post(
 router.get('/', getAchievements);
 
 router.get('/:id', getAchievementById);
+
+// Update achievement tanpa validasi body ketat untuk kemudahan partial update
+router.put('/:id', createUploader('achievements').single('image'), convertToWebp, updateAchievement);
 
 router.delete('/:id', deleteAchievement);
 

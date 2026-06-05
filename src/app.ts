@@ -12,6 +12,12 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (err instanceof SyntaxError && 'status' in err && err.status === 400 && 'body' in err) {
+        return res.status(400).json({ success: false, message: 'Invalid JSON payload format' });
+    }
+    next(err);
+});
 app.use(express.urlencoded({ extended: true }));
 
 // Static files

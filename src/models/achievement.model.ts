@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 // Interface untuk tipe data TypeScript
 export interface IAchievement extends Document {
+    slug: string;
     title: string;
     description: string;
     image: string;
@@ -12,6 +13,9 @@ export interface IAchievement extends Document {
     status: boolean
     pinned: boolean
 
+    value: number
+    sort: number
+
     category: 'Sertifikat' | 'Penghargaan' | 'Lainnya';
     level: 'Nasional' | 'Internasional' | 'Regional';
 }
@@ -19,6 +23,11 @@ export interface IAchievement extends Document {
 // Schema Mongoose
 const AchievementSchema = new Schema<IAchievement>(
     {
+        slug: {
+            type: String,
+            required: [true, 'Slug wajib diisi'],
+            trim: true,
+        },
         title: {
             type: String,
             required: [true, 'Judul achievement wajib diisi'],
@@ -31,7 +40,7 @@ const AchievementSchema = new Schema<IAchievement>(
         },
         image: {
             type: String,
-            required: [true, 'Gambar achievement wajib diisi'],
+            default: 'https://images.unsplash.com/photo-1523289217630-0dd16184af8e?auto=format&fit=crop&q=80&w=1000',
         },
         issuer: {
             type: String,
@@ -59,6 +68,14 @@ const AchievementSchema = new Schema<IAchievement>(
         pinned: {
             type: Boolean,
             default: false,
+        },
+        value: {
+            type: Number,
+            unique: true,
+        },
+        sort: {
+            type: Number,
+            default: 0,
         },
         category: {
             type: String,

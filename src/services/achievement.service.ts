@@ -11,32 +11,58 @@ export class AchievementService {
             }
         }
 
-        let boxFileId = undefined;
+        let finalImage = data.image; // Bisa dari req.body berupa URL
         if (file) {
             const achievementFolderId = await getOrCreateBoxFolder('achievements');
             // Upload ke Box menggunakan Buffer yang ada di memory
-            boxFileId = await uploadToBox(file.buffer, file.originalname, achievementFolderId);
+            finalImage = await uploadToBox(file.buffer, file.originalname, achievementFolderId);
         }
+
+        // Auto-increment value
+        const lastAchievement = await Achievement.findOne().sort({ value: -1 });
+        const nextValue = lastAchievement && lastAchievement.value ? lastAchievement.value + 1 : 1;
+        data.value = nextValue;
 
         const newAchievement = new Achievement({
             ...data,
-            // Simpan ID dari file Box, bukan nama file lokal
-            image: boxFileId
+            // Jika finalImage undefined, Mongoose akan menggunakan default image
+            ...(finalImage && { image: finalImage })
         });
 
         return await newAchievement.save();
     }
 
-    static async getAll(): Promise<any[]> {
-        const achievements = await Achievement.find().sort({ createdAt: -1 });
+    static async getAll(page: number = 1, limit: number = 20): Promise<{ data: any[], pagination: any }> {
+        const skip = (page - 1) * limit;
+        const total = await Achievement.countDocuments();
+        
+        const achievements = await Achievement.find()
+            .sort({ sort: 1, value: 1, createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
         // Generate URL secara dinamis saat di-GET
-        return Promise.all(achievements.map(async (ach) => {
+        const mappedData = await Promise.all(achievements.map(async (ach) => {
             const data = ach.toObject();
             if (data.image) {
-                data.image = await getBoxFileUrl(data.image);
+                if (data.image.startsWith('http')) {
+                    // Biarkan, sudah berupa URL (default atau manual link)
+                } else {
+                    try { data.image = await getBoxFileUrl(data.image); } catch (e) { }
+                }
             }
             return data;
         }));
+
+        return {
+            data: mappedData,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        };
     }
 
     static async getById(id: string): Promise<any | null> {
@@ -46,9 +72,26 @@ export class AchievementService {
         const data = achievement.toObject();
         // Generate URL secara dinamis saat di-GET
         if (data.image) {
-            data.image = await getBoxFileUrl(data.image);
+            if (data.image.startsWith('http')) {
+                // Biarkan
+            } else {
+                try { data.image = await getBoxFileUrl(data.image); } catch (e) { }
+            }
         }
         return data;
+    }
+
+    static async update(id: string, data: any, file?: Express.Multer.File): Promise<IAchievement | null> {
+        const achievement = await Achievement.findById(id);
+        if (!achievement) return null;
+
+        if (file) {
+            const achievementFolderId = await getOrCreateBoxFolder('achievements');
+            const boxFileId = await uploadToBox(file.buffer, file.originalname, achievementFolderId);
+            data.image = boxFileId;
+        }
+
+        return await Achievement.findByIdAndUpdate(id, data, { new: true });
     }
 
     static async delete(id: string): Promise<IAchievement | null> {

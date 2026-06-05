@@ -3,32 +3,51 @@ import { uploadToBox, getBoxFileUrl, getOrCreateBoxFolder } from '../helpers/box
 
 export class AlbumService {
     static async create(data: any, files?: Express.Multer.File[] | Express.Multer.File): Promise<IAlbum> {
-        let boxFileIds: string[] = [];
-        
+        if (!data.image) data.image = [];
+        if (!Array.isArray(data.image)) data.image = [data.image];
+
         if (files) {
             const albumFolderId = await getOrCreateBoxFolder('albums');
             const fileArray = Array.isArray(files) ? files : [files];
-            boxFileIds = await Promise.all(fileArray.map(file => uploadToBox(file.buffer, file.originalname, albumFolderId)));
+            const uploadedIds = await Promise.all(fileArray.map(file => uploadToBox(file.buffer, file.originalname, albumFolderId)));
+            data.image.push(...uploadedIds);
+
+            if (!data.title && fileArray.length > 0) {
+                data.title = fileArray[0].originalname.replace(/\.[^/.]+$/, "");
+            }
         }
 
         const newAlbum = new Album({
-            ...data,
-            image: boxFileIds
+            ...data
         });
 
         return await newAlbum.save();
     }
 
-    static async getAll(): Promise<any[]> {
-        const albums = await Album.find().sort({ createdAt: -1 });
-        return Promise.all(albums.map(async (alb) => {
+    static async getAll(page: number = 1, limit: number = 20): Promise<{ data: any[], pagination: any }> {
+        const skip = (page - 1) * limit;
+        const total = await Album.countDocuments();
+        
+        const albums = await Album.find()
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+            
+        const mappedData = await Promise.all(albums.map(async (alb) => {
             const data: any = alb.toObject();
             let finalImage = data.image;
             let finalImageUrl = undefined;
 
             if (data.image && Array.isArray(data.image)) {
-                const rawUrls = await Promise.all(data.image.map((id: string) => getBoxFileUrl(id)));
-                finalImage = rawUrls.map(url => `${url}?width=${data.width}&height=${data.height}`);
+                const rawUrls = await Promise.all(data.image.map(async (id: string) => {
+                    if (id.startsWith('http')) return id;
+                    try { return await getBoxFileUrl(id); } catch (e) { return id; }
+                }));
+                
+                finalImage = rawUrls.map(url => {
+                    if (url.startsWith('http') && !url.includes('box.com')) return url;
+                    return `${url}${url.includes('?') ? '&' : '?'}width=${data.width}&height=${data.height}`;
+                });
                 finalImageUrl = rawUrls; // URL aslinya
             }
             
@@ -42,6 +61,16 @@ export class AlbumService {
                 __v
             };
         }));
+
+        return {
+            data: mappedData,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        };
     }
 
     static async getById(id: string): Promise<any | null> {
@@ -53,8 +82,15 @@ export class AlbumService {
         let finalImageUrl = undefined;
 
         if (data.image && Array.isArray(data.image)) {
-            const rawUrls = await Promise.all(data.image.map((id: string) => getBoxFileUrl(id)));
-            finalImage = rawUrls.map(url => `${url}?width=${data.width}&height=${data.height}`);
+            const rawUrls = await Promise.all(data.image.map(async (id: string) => {
+                if (id.startsWith('http')) return id;
+                try { return await getBoxFileUrl(id); } catch (e) { return id; }
+            }));
+            
+            finalImage = rawUrls.map(url => {
+                if (url.startsWith('http') && !url.includes('box.com')) return url;
+                return `${url}${url.includes('?') ? '&' : '?'}width=${data.width}&height=${data.height}`;
+            });
             finalImageUrl = rawUrls; // URL aslinya
         }
         
@@ -67,6 +103,23 @@ export class AlbumService {
             updatedAt,
             __v
         };
+    }
+
+    static async update(id: string, data: any, files?: Express.Multer.File[] | Express.Multer.File): Promise<IAlbum | null> {
+        const album = await Album.findById(id);
+        if (!album) return null;
+
+        if (files) {
+            const albumFolderId = await getOrCreateBoxFolder('albums');
+            const fileArray = Array.isArray(files) ? files : [files];
+            const uploadedIds = await Promise.all(fileArray.map(file => uploadToBox(file.buffer, file.originalname, albumFolderId)));
+            
+            if (!data.image) data.image = [];
+            if (!Array.isArray(data.image)) data.image = [data.image];
+            data.image.push(...uploadedIds);
+        }
+
+        return await Album.findByIdAndUpdate(id, data, { new: true });
     }
 
     static async delete(id: string): Promise<IAlbum | null> {

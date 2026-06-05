@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 
 const achievementSchema = z.object({
+    slug: z.string().min(1, 'Slug tidak boleh kosong'),
     title: z.string().min(1, 'Judul (title) tidak boleh kosong'),
     description: z.string().min(1, 'Deskripsi (description) tidak boleh kosong'),
     issuer: z.string().min(1, 'Penerbit (issuer) tidak boleh kosong'),
@@ -10,6 +11,7 @@ const achievementSchema = z.object({
     category: z.enum(['Sertifikat', 'Penghargaan', 'Lainnya']),
     level: z.enum(['Nasional', 'Internasional', 'Regional']),
     tags: z.array(z.string()).min(1, 'Tags minimal 1 item'),
+    image: z.string().optional(),
 });
 
 export const validateAchievement = (req: Request, res: Response, next: NextFunction): void => {

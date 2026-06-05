@@ -1,9 +1,14 @@
 import { Request, Response } from 'express';
 import { AchievementService } from '../services/achievement.service';
+import { pusher } from '../config/pusher.config';
 
 export const createAchievement = async (req: Request, res: Response): Promise<void> => {
     try {
         const achievement = await AchievementService.create(req.body, req.file);
+
+        try {
+            await pusher.trigger('achievement-channel', 'achievement-updated', { action: 'create', data: achievement });
+        } catch (err) {}
 
         res.status(201).json({
             success: true,
@@ -18,8 +23,15 @@ export const createAchievement = async (req: Request, res: Response): Promise<vo
 
 export const getAchievements = async (req: Request, res: Response): Promise<void> => {
     try {
-        const achievements = await AchievementService.getAll();
-        res.status(200).json({ success: 'ok', data: achievements });
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 20;
+
+        const result = await AchievementService.getAll(page, limit);
+        res.status(200).json({ 
+            success: true, 
+            data: result.data, 
+            pagination: result.pagination 
+        });
     } catch (error: any) {
         console.error('Error saat getAll:', error);
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
@@ -48,7 +60,30 @@ export const deleteAchievement = async (req: Request<{ id: string }>, res: Respo
             res.status(404).json({ success: false, message: 'Achievement tidak ditemukan' });
             return;
         }
+
+        try {
+            await pusher.trigger('achievement-channel', 'achievement-updated', { action: 'delete', id: req.params.id });
+        } catch (err) {}
+
         res.status(200).json({ success: true, message: 'Achievement berhasil dihapus' });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+};
+
+export const updateAchievement = async (req: Request<{ id: string }>, res: Response): Promise<void> => {
+    try {
+        const achievement = await AchievementService.update(req.params.id as string, req.body, req.file);
+        if (!achievement) {
+            res.status(404).json({ success: false, message: 'Achievement tidak ditemukan' });
+            return;
+        }
+
+        try {
+            await pusher.trigger('achievement-channel', 'achievement-updated', { action: 'update', data: achievement });
+        } catch (err) {}
+
+        res.status(200).json({ success: true, message: 'Achievement berhasil diupdate', data: achievement });
     } catch (error: any) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }

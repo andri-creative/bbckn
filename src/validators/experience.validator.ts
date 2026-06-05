@@ -4,9 +4,17 @@ import { z } from 'zod';
 const experienceSchema = z.object({
     companyName: z.string().min(1, 'Company Name wajib diisi'),
     position: z.string().min(1, 'Position wajib diisi'),
+    location: z.string().optional(),
     startDate: z.string().min(1, 'Start Date wajib diisi'),
     endDate: z.string().optional(),
-    description: z.string().min(1, 'Description wajib diisi'),
+    icon: z.string().min(1, 'Icon wajib diisi'),
+    summary: z.string().min(1, 'Summary wajib diisi'),
+    content: z.string().min(1, 'Content wajib diisi'),
+    current: z.preprocess((val) => {
+        if (val === 'true') return true;
+        if (val === 'false') return false;
+        return val;
+    }, z.boolean().optional().default(false)),
     responsibilities: z.preprocess((val) => {
         if (typeof val === 'string') {
             try { return JSON.parse(val); } catch { return [val]; }
@@ -16,7 +24,6 @@ const experienceSchema = z.object({
     status: z.enum(['active', 'inactive']).optional().default('active'),
     type: z.enum(['Magang', 'Penuh Waktu', 'Kontrak', 'Freelance', 'Wirausaha', 'Lainnya']).optional().default('Penuh Waktu'),
     mode: z.enum(['WFH', 'WFA', 'WFO', 'Hybrid', 'Lainnya']).optional().default('WFH'),
-    location: z.string().optional(),
 });
 
 export const validateExperience = (req: Request, res: Response, next: NextFunction): void => {

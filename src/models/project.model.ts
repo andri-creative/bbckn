@@ -3,14 +3,27 @@ import mongoose, { Document, Schema } from 'mongoose';
 // Interface untuk tipe data TypeScript
 export interface IProject extends Document {
     title: string;
-    description?: string;
-    image: string;
+    slug: string;
+    category: string;
+    summary: string;
+    content?: string;
+    company: string;
+    duration: string;
+    location: string;
+    workType: string;
+
+    icon: string;
+    image: string[];
     status: boolean;
-    role?: string[];
-    demoUrl?: string;
-    githubUrl?: string;
-    features?: string[];
-    pinned: boolean;
+
+    color: string;
+    accent: string;
+    border: string;
+
+    demoUrl: string;
+    githubUrl: string;
+
+    sort: number;
 
     techStack: mongoose.Types.ObjectId[];
     // Referensi ke model Tools
@@ -25,14 +38,65 @@ const ProjectSchema = new Schema<IProject>(
             required: [true, 'Judul project wajib diisi'],
             trim: true,
         },
-        description: {
+        slug: {
             type: String,
-            required: [true, 'Deskripsi project wajib diisi'],
+            required: [true, 'Slug wajib diisi'],
             trim: true,
         },
-        image: {
+        category: {
             type: String,
-            required: [true, 'Gambar project wajib diisi'],
+            trim: true,
+        },
+        summary: {
+            type: String,
+            required: [true, 'Summary wajib diisi'],
+            trim: true,
+        },
+        content: {
+            type: String,
+        },
+        company: {
+            type: String,
+            trim: true,
+        },
+        duration: {
+            type: String,
+            trim: true,
+        },
+        location: {
+            type: String,
+            trim: true,
+        },
+        workType: {
+            type: String,
+            trim: true,
+        },
+        icon: {
+            type: String,
+        },
+        image: {
+            type: [String],
+            default: [],
+        },
+        status: {
+            type: Boolean,
+            default: true,
+        },
+        sort: {
+            type: Number,
+            default: 0,
+        },
+        color: {
+            type: String,
+            trim: true,
+        },
+        accent: {
+            type: String,
+            trim: true,
+        },
+        border: {
+            type: String,
+            trim: true,
         },
         demoUrl: {
             type: String,
@@ -41,22 +105,6 @@ const ProjectSchema = new Schema<IProject>(
         githubUrl: {
             type: String,
             trim: true,
-        },
-        role: {
-            type: [String],
-            default: [],
-        },
-        features: {
-            type: [String],
-            default: [],
-        },
-        status: {
-            type: Boolean,
-            default: true,
-        },
-        pinned: {
-            type: Boolean,
-            default: false,
         },
         techStack: [{
             type: Schema.Types.ObjectId,

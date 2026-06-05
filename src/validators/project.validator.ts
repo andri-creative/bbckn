@@ -3,32 +3,35 @@ import { z } from 'zod';
 
 const projectSchema = z.object({
     title: z.string().min(1, 'Title wajib diisi'),
-    description: z.string().min(1, 'Description wajib diisi'),
-    demoUrl: z.string().optional(),
-    githubUrl: z.string().optional(),
+    slug: z.string().min(1, 'Slug wajib diisi'),
+    summary: z.string().min(1, 'Summary wajib diisi'),
+    category: z.string().optional(),
+    content: z.string().optional(),
+    company: z.string().optional(),
+    duration: z.string().optional(),
+    location: z.string().optional(),
+    workType: z.string().optional(),
+    icon: z.string().optional(),
     status: z.preprocess((val) => {
         if (val === 'true') return true;
         if (val === 'false') return false;
         return val;
     }, z.boolean().optional().default(true)),
-    pinned: z.preprocess((val) => {
-        if (val === 'true') return true;
-        if (val === 'false') return false;
-        return val;
-    }, z.boolean().optional().default(false)),
+    sort: z.preprocess((val) => Number(val), z.number().optional().default(0)),
+    color: z.string().optional(),
+    accent: z.string().optional(),
+    border: z.string().optional(),
+    demoUrl: z.string().optional(),
+    githubUrl: z.string().optional(),
     techStack: z.preprocess((val) => {
-        if (typeof val === 'string') { try { return JSON.parse(val); } catch { return [val]; } }
-        return val;
-    }, z.array(z.string()).min(1, 'Tech stack minimal 1')),
-    role: z.preprocess((val) => {
-        if (typeof val === 'string') { try { return JSON.parse(val); } catch { return [val]; } }
-        return val;
-    }, z.array(z.string()).optional().default([])),
-    features: z.preprocess((val) => {
         if (typeof val === 'string') { try { return JSON.parse(val); } catch { return [val]; } }
         return val;
     }, z.array(z.string()).optional().default([])),
     tools: z.preprocess((val) => {
+        if (typeof val === 'string') { try { return JSON.parse(val); } catch { return [val]; } }
+        return val;
+    }, z.array(z.string()).optional().default([])),
+    image: z.preprocess((val) => {
         if (typeof val === 'string') { try { return JSON.parse(val); } catch { return [val]; } }
         return val;
     }, z.array(z.string()).optional().default([])),

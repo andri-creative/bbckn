@@ -1,5 +1,11 @@
 @url=http://localhost:30381
 
+
+###
+GET https://bbckn.vercel.app/v1/api
+x-timestamp: {{$timestamp}}
+
+
 ##
 GET {{url}}/v1/api
 
@@ -15,9 +21,9 @@ x-timestamp: 1780154762638
 
 
 ###
-GET {{url}}/v1/api/achievement
-Content-Type: application/json
-x-timestamp: 1780146802132
+GET https://bbckn.vercel.app/v1/api/achievement
+# Content-Type: application/json
+x-timestamp: {{$timestamp}}
 
 
 ###

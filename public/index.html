@@ -240,7 +240,7 @@
           const container = document.getElementById('card-container');
           container.innerHTML = ''; // Hapus loading state
 
-          if (result.success === 'ok' && result.data && result.data.length > 0) {
+          if (result.success === true && result.data && result.data.length > 0) {
             result.data.forEach(item => {
               // Format tanggal
               const dateObj = new Date(item.createdAt);

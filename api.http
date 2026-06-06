@@ -368,7 +368,7 @@ x-timestamp: {{$timestamp}}
 }
 
 ###
-GET {{url}}/v1/api/bio
+GET {{server}}/v1/api/bio
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 
@@ -422,7 +422,7 @@ x-timestamp: {{$timestamp}}
 
 ###
 # CONTOH POST TERPISAH: HANYA MENGIRIM STATS
-POST {{url}}/v1/api/bio
+POST {{server}}/v1/api/bio
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 

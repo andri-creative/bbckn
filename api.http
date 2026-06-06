@@ -307,7 +307,7 @@ x-timestamp: {{$timestamp}}
 # ─────────────────────────────────────────────────────────
 # ACHIEVEMENT API
 # ─────────────────────────────────────────────────────────
-GET {{url}}/v1/api/achievement
+GET {{server}}/v1/api/achievement
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 

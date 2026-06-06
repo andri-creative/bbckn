@@ -68,7 +68,9 @@ export class ProjectService {
     }
 
     static async getById(id: string): Promise<any | null> {
-        const project = await Project.findById(id).populate('tools').populate('techStack');
+        const isObjectId = /^[0-9a-fA-F]{24}$/.test(id);
+        const query = isObjectId ? { $or: [{ _id: id }, { slug: id }] } : { slug: id };
+        const project = await Project.findOne(query).populate('tools').populate('techStack');
         if (!project) return null;
         
         const data: any = project.toObject();
@@ -98,7 +100,9 @@ export class ProjectService {
     }
 
     static async update(id: string, data: any, files?: Express.Multer.File[]): Promise<IProject | null> {
-        const project = await Project.findById(id);
+        const isObjectId = /^[0-9a-fA-F]{24}$/.test(id);
+        const query = isObjectId ? { $or: [{ _id: id }, { slug: id }] } : { slug: id };
+        const project = await Project.findOne(query);
         if (!project) return null;
 
         if (files && files.length > 0) {
@@ -111,10 +115,12 @@ export class ProjectService {
                 data.image.push(uploadedFile);
             }
         }
-        return await Project.findByIdAndUpdate(id, data, { new: true }).populate('tools').populate('techStack');
+        return await Project.findOneAndUpdate(query, data, { new: true }).populate('tools').populate('techStack');
     }
 
     static async delete(id: string): Promise<IProject | null> {
-        return await Project.findByIdAndDelete(id);
+        const isObjectId = /^[0-9a-fA-F]{24}$/.test(id);
+        const query = isObjectId ? { $or: [{ _id: id }, { slug: id }] } : { slug: id };
+        return await Project.findOneAndDelete(query);
     }
 }

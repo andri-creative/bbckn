@@ -66,7 +66,9 @@ export class AchievementService {
     }
 
     static async getById(id: string): Promise<any | null> {
-        const achievement = await Achievement.findById(id);
+        const isObjectId = /^[0-9a-fA-F]{24}$/.test(id);
+        const query = isObjectId ? { $or: [{ _id: id }, { slug: id }] } : { slug: id };
+        const achievement = await Achievement.findOne(query);
         if (!achievement) return null;
         
         const data = achievement.toObject();
@@ -82,7 +84,9 @@ export class AchievementService {
     }
 
     static async update(id: string, data: any, file?: Express.Multer.File): Promise<IAchievement | null> {
-        const achievement = await Achievement.findById(id);
+        const isObjectId = /^[0-9a-fA-F]{24}$/.test(id);
+        const query = isObjectId ? { $or: [{ _id: id }, { slug: id }] } : { slug: id };
+        const achievement = await Achievement.findOne(query);
         if (!achievement) return null;
 
         if (file) {
@@ -91,10 +95,12 @@ export class AchievementService {
             data.image = boxFileId;
         }
 
-        return await Achievement.findByIdAndUpdate(id, data, { new: true });
+        return await Achievement.findOneAndUpdate(query, data, { new: true });
     }
 
     static async delete(id: string): Promise<IAchievement | null> {
-        return await Achievement.findByIdAndDelete(id);
+        const isObjectId = /^[0-9a-fA-F]{24}$/.test(id);
+        const query = isObjectId ? { $or: [{ _id: id }, { slug: id }] } : { slug: id };
+        return await Achievement.findOneAndDelete(query);
     }
 }

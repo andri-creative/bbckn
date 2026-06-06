@@ -26,8 +26,34 @@ const experienceSchema = z.object({
     mode: z.enum(['WFH', 'WFA', 'WFO', 'Hybrid', 'Lainnya']).optional().default('WFH'),
 });
 
+// Schema partial untuk PUT — semua field opsional
+const updateExperienceSchema = experienceSchema.partial().extend({
+    sort: z.number().optional(),
+});
+
 export const validateExperience = (req: Request, res: Response, next: NextFunction): void => {
     const result = experienceSchema.safeParse(req.body);
+
+    if (!result.success) {
+        const errors: Record<string, string[]> = {};
+
+        result.error.issues.forEach((err) => {
+            const path = err.path.join('.');
+            if (!errors[path]) {
+                errors[path] = [];
+            }
+            errors[path].push(err.message);
+        });
+
+        res.status(400).json({ success: false, errors });
+        return;
+    }
+
+    next();
+};
+
+export const validateUpdateExperience = (req: Request, res: Response, next: NextFunction): void => {
+    const result = updateExperienceSchema.safeParse(req.body);
 
     if (!result.success) {
         const errors: Record<string, string[]> = {};

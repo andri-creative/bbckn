@@ -8,7 +8,8 @@ import {
     updateExperience,
     deleteExperience
 } from '../controllers/experience.controller';
-import { validateExperience } from '../validators/experience.validator';
+import { validateExperience, validateUpdateExperience } from '../validators/experience.validator';
+
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -28,7 +29,7 @@ router.put(
     '/:id',
     upload.single('companyLogo'),
     convertToWebp,
-    validateExperience,
+    validateUpdateExperience,
     updateExperience
 );
 

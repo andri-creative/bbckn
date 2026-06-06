@@ -1,8 +1,9 @@
 @url=http://localhost:30381
 
+@server=https://bbckn.vercel.app
 
 ###
-GET https://bbckn.vercel.app/v1/api
+GET {{server}}/v1/api
 x-timestamp: {{$timestamp}}
 
 
@@ -47,12 +48,12 @@ x-timestamp: 1780146924672
 }
 
 ###
-GET {{url}}/v1/api/experience
+GET {{server}}/v1/api/experience
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 
 ###
-POST {{url}}/v1/api/experience
+POST {{server}}/v1/api/experience
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 
@@ -73,19 +74,12 @@ x-timestamp: {{$timestamp}}
 }
 
 ###
-PUT {{url}}/v1/api/experience/6a1ab3a20b0c7edbe2a320bb
+PUT {{server}}/v1/api/experience/6a235abef7c649d3868b040a
 Content-Type: application/json
-x-timestamp: 1780134807851
+x-timestamp: {{$timestamp}}
 
 {
-    "companyName": "PT Cipta Teknologi Update",
-    "position": "Senior Frontend Developer",
-    "startDate": "2023-01-01",
-    "description": "Mengembangkan antarmuka dengan sangat cepat",
-    "responsibilities": ["Lead Tim", "Ngoding"],
-    "type": "Penuh Waktu",
-    "mode": "WFA",
-    "status": "active"
+    "sort": 1
 }
 
 ###
@@ -104,12 +98,12 @@ x-timestamp: 1780137539866
 }
 
 ###
-GET {{url}}/v1/api/project?page=1&limit=20
+GET {{server}}/v1/api/project?page=1&limit=20
 Content-Type: application/json
-x-timestamp: 1780137539866
+x-timestamp: {{$timestamp}}
 
 ###
-POST {{url}}/v1/api/project
+POST {{server}}/v1/api/project
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 
@@ -341,19 +335,15 @@ x-timestamp: {{$timestamp}}
     "status": false
 }
 
-    "techStack": [],
-    "tools": []
-}
-
 
 ###
-GET {{url}}/v1/api/tools-icon
+GET {{server}}/v1/api/tools-icon
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 
 
 ###
-POST {{url}}/v1/api/tools-icon
+POST {{server}}/v1/api/tools-icon
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 
@@ -363,7 +353,7 @@ x-timestamp: {{$timestamp}}
 }
 
 ###
-PUT {{url}}/v1/api/tools-icon/6a21aa36eef2a2ceccbc9bd1
+PUT {{server}}/v1/api/tools-icon/6a2360169d9a8919c1f1fc4b
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 
@@ -441,7 +431,7 @@ x-timestamp: {{$timestamp}}
 
 ###
 # CONTOH POST TERPISAH: HANYA MENGIRIM EDUCATIONS
-POST {{url}}/v1/api/bio
+POST {{server}}/v1/api/bio
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 
@@ -464,7 +454,7 @@ x-timestamp: {{$timestamp}}
 
 ###
 # CONTOH POST TERPISAH: HANYA MENGIRIM PUBLICATIONS
-POST {{url}}/v1/api/bio
+POST {{server}}/v1/api/bio
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 

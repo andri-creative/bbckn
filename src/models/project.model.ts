@@ -108,11 +108,11 @@ const ProjectSchema = new Schema<IProject>(
         },
         techStack: [{
             type: Schema.Types.ObjectId,
-            ref: 'Tools'
+            ref: 'ToolsIcon'
         }],
         tools: [{
             type: Schema.Types.ObjectId,
-            ref: 'Tools'
+            ref: 'ToolsIcon'
         }]
     },
     {

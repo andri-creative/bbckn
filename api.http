@@ -135,13 +135,19 @@ x-timestamp: {{$timestamp}}
 ###
 # CONTOH PUT (PARTIAL UPDATE) PROJECT
 # Anda bebas mengirim field apa saja (tanpa ditolak validasi)
-PUT {{url}}/v1/api/project/6a22bbde24272d86927f812d
+PUT {{server}}/v1/api/project/6a2364176b6239a6e3d15a8c
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 
 {
-    "techStack": [],
-    "tools": []
+    "techStack": [
+        "6a23c3f2c5d1b75481fcb81d",
+        "6a2360169d9a8919c1f1fc4b"
+    ],
+    "tools": [
+        "6a23c3f2c5d1b75481fcb81d",
+        "6a2360169d9a8919c1f1fc4b"
+    ]
 }
 
 

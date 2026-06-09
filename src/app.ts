@@ -4,6 +4,7 @@ import path from 'path';
 import mongoose from 'mongoose';
 import routes from './routes';
 import socketRoutes from './routes/socket.routes';
+import cookieParser from 'cookie-parser';
 
 const version = '/v1/api'
 
@@ -23,6 +24,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
     next(err);
 });
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Static files
 app.use(express.static('public'));

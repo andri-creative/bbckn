@@ -523,9 +523,10 @@ x-timestamp: {{$timestamp}}
 }
 
 ###
-PUT {{url}}/v1/api/achievement/6a22c3577a0d95e83c69dd83
+PUT {{url}}/v1/api/achievement/6a231b344fec20b3c54d7f94
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
+x-cokis: 9e8b2fd8b1033a7a3560f46af71b71e8a3cbf4834185cd9dab6aca3b0a42de17
 
 {
     "sort": 1,
@@ -570,3 +571,60 @@ x-timestamp: {{$timestamp}}
 DELETE {{url}}/v1/api/album/REPLACE_WITH_ID
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
+
+###
+# ─────────────────────────────────────────────────────────
+# USER / AUTH API
+# ─────────────────────────────────────────────────────────
+
+### 1. Setup Initial Admin (Hanya bisa digunakan saat database kosong)
+POST {{url}}/v1/api/user/setup
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "name": "Andrianto",
+    "email": "andri@andri.creative.com",
+    "username": "andri",
+    "password": "password123"
+}
+
+### 2. Login User (Mendapatkan session cookie)
+POST {{url}}/v1/api/user/login
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "emailOrUsername": "andri",
+    "password": "password123"
+}
+
+### 3. Check Auth Status
+GET {{url}}/v1/api/user/check-auth
+x-timestamp: {{$timestamp}}
+
+### 4. Get All Users (Butuh Cookie Admin)
+GET {{url}}/v1/api/user
+x-timestamp: {{$timestamp}}
+
+### 5. Create User Baru (Butuh Cookie Admin)
+POST {{url}}/v1/api/user
+Content-Type: application/json
+x-timestamp: {{$timestamp}}
+
+{
+    "name": "User Biasa",
+    "email": "user@example.com",
+    "username": "user1",
+    "password": "password123",
+    "role": "User"
+}
+
+### 6. Delete User (Butuh Cookie Admin)
+DELETE {{url}}/v1/api/user/REPLACE_WITH_USER_ID
+x-timestamp: {{$timestamp}}
+
+### 7. Logout User
+POST {{url}}/v1/api/user/logout
+x-timestamp: {{$timestamp}}
+

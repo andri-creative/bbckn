@@ -20,18 +20,23 @@ router.use(validateTimestamp);
 // Middleware global: GET hanya butuh timestamp (sudah lewat di atas)
 // POST, PUT, PATCH, DELETE wajib menyertakan cookie (isAdmin)
 router.use((req, res, next) => {
-    // Biarkan method GET lewat
-    if (req.method === 'GET') {
-        return next();
-    }
-    
-    // Pengecualian untuk path login, logout, dan setup (admin pertama)
-    if (req.path === '/user/login' || req.path === '/user/logout' || req.path === '/user/setup') {
-        return next();
-    }
-    
-    // Method selain GET akan dilempar ke pengecekan Admin (cookie)
-    isAdmin(req, res, next);
+  // Biarkan method GET lewat
+  if (req.method === 'GET') {
+    return next();
+  }
+
+  // Pengecualian untuk path login, logout, setup (admin pertama), dan voting rating (POST /ranting)
+  if (
+    req.path === '/user/login' ||
+    req.path === '/user/logout' ||
+    req.path === '/user/setup' ||
+    (req.method === 'POST' && (req.path === '/ranting' || req.path === '/ranting/'))
+  ) {
+    return next();
+  }
+
+  // Method selain GET akan dilempar ke pengecekan Admin (cookie)
+  isAdmin(req, res, next);
 });
 
 router.use('/achievement', achievementRoutes);

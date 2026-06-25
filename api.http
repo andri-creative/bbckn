@@ -33,18 +33,18 @@ Content-Type: application/json
 x-timestamp: 1780129994603
 
 ###
-GET {{url}}/v1/api/ranting
+GET {{server}}/v1/api/ranting
 Content-Type: application/json
-x-timestamp: 1780580902440
+x-timestamp: {{$timestamp}}
 
 
 ###
 POST {{url}}/v1/api/ranting
 Content-Type: application/json
-x-timestamp: 1780146924672
+x-timestamp: {{$timestamp}}
 
 {
-    "rating": 3
+    "rating": 4
 }
 
 ###

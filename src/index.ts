@@ -1,13 +1,11 @@
-import app from "./app";
-import { connectMongoDb, disconnectMongodb } from "./config/mongo_db";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import app from './app';
+import { connectMongoDb, disconnectMongodb } from './config/mongo_db';
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
-
-
 
 async function startServer() {
   try {
@@ -17,19 +15,22 @@ async function startServer() {
     await connectMongoDb('development');
 
     console.log('✅ MongoDB connected successfully');
-    console.log("ReadyState:", mongoose.connection.readyState);
+    console.log('ReadyState:', mongoose.connection.readyState);
 
     // 2. Test query untuk verifikasi koneksi
     try {
       const db = mongoose.connection.db;
       if (db) {
         const collections = await db.listCollections().toArray();
-        console.log("📚 Collections available:", collections.map((c: any) => c.name));
+        console.log(
+          '📚 Collections available:',
+          collections.map((c: any) => c.name),
+        );
       } else {
-        console.warn("⚠️  DB is undefined - mungkin belum siap");
+        console.warn('⚠️  DB is undefined - mungkin belum siap');
       }
     } catch (e) {
-      console.error("❌ Test query gagal:", e);
+      console.error('❌ Test query gagal:', e);
       throw e; // Stop server jika test query gagal
     }
 
@@ -51,8 +52,6 @@ async function startServer() {
 
     process.on('SIGINT', gracefulShutdown);
     process.on('SIGTERM', gracefulShutdown);
-
-
   } catch (error) {
     console.error('❌ Gagal start server:', error);
     process.exit(1);

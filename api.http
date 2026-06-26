@@ -39,12 +39,12 @@ x-timestamp: {{$timestamp}}
 
 
 ###
-POST {{url}}/v1/api/ranting
+POST {{server}}/v1/api/ranting
 Content-Type: application/json
 x-timestamp: {{$timestamp}}
 
 {
-    "rating": 4
+    "rating": 5
 }
 
 ###
